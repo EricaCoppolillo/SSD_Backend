@@ -1,2 +1,2 @@
 readme di prova!
-edited by Goffredson
+edited by Goffredson & Borag
