@@ -13,6 +13,7 @@ dj-rest-auth = "*"
 django-allauth = "*"
 pytest-django = "*"
 mixer = "*"
+coverage = "*"
 
 [dev-packages]
 
