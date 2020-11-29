@@ -1,9 +1,17 @@
 # Create your views here.
-from rest_framework import generics
+from rest_framework import generics, permissions
 
 from item_shopping_list.models import ShoppingList, Item
+from item_shopping_list.permissions import IsModerator, IsUser
 from item_shopping_list.serializers import UserShoppingListSerializer, ModeratorShoppingListItemSerializer, \
     ModeratorShoppingListSerializer, CatalogueSerializer, AdminManageItemSerializer, UserEditShoppingListSerializer
+
+
+# ALL
+class Catalogue(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Item.objects.all()
+    serializer_class = CatalogueSerializer
 
 
 # ADMIN
@@ -18,11 +26,13 @@ class AdminEditItem(generics.RetrieveUpdateDestroyAPIView):
 
 # MODERATOR
 class ModeratorShoppingListItem(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsModerator]
     queryset = ShoppingList.objects.all()
     serializer_class = ModeratorShoppingListItemSerializer
 
 
 class ModeratorShowShoppingList(generics.ListAPIView):
+    permission_classes = [IsModerator]
     serializer_class = ModeratorShoppingListSerializer
 
     def get_queryset(self):
@@ -32,6 +42,7 @@ class ModeratorShowShoppingList(generics.ListAPIView):
 
 # USER
 class UserShowShoppingList(generics.ListAPIView):
+    permission_classes = [IsUser]
     serializer_class = UserShoppingListSerializer
 
     def get_queryset(self):
@@ -39,6 +50,7 @@ class UserShowShoppingList(generics.ListAPIView):
 
 
 class UserAddShoppingList(generics.CreateAPIView):
+    permission_classes = [IsUser]
     serializer_class = UserShoppingListSerializer
 
     def perform_create(self, serializer):
@@ -46,10 +58,6 @@ class UserAddShoppingList(generics.CreateAPIView):
 
 
 class UserEditShoppingList(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsUser]
     queryset = ShoppingList.objects.all()
     serializer_class = UserEditShoppingListSerializer
-
-
-class Catalogue(generics.ListAPIView):
-    queryset = Item.objects.all()
-    serializer_class = CatalogueSerializer

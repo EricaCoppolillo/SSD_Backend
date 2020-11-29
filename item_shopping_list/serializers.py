@@ -3,6 +3,13 @@ from rest_framework import serializers
 from item_shopping_list.models import ShoppingList, Item
 
 
+# ALL
+class CatalogueSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('id', 'name', 'category', 'manufacturer', 'price', 'description')
+        model = Item
+
+
 # ADMIN
 class AdminManageItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,9 +41,3 @@ class UserEditShoppingListSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('id', 'quantity')
         model = ShoppingList
-
-
-class CatalogueSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ('id', 'name', 'category', 'manufacturer', 'price', 'description')
-        model = Item
