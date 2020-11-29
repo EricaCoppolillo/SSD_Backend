@@ -3,7 +3,17 @@ from rest_framework import generics
 
 from item_shopping_list.models import ShoppingList, Item
 from item_shopping_list.serializers import UserShoppingListSerializer, ModeratorShoppingListItemSerializer, \
-    ModeratorShoppingListSerializer, CatalogueSerializer
+    ModeratorShoppingListSerializer, CatalogueSerializer, AdminManageItemSerializer, UserEditShoppingListSerializer
+
+
+# ADMIN
+class AdminAddItem(generics.CreateAPIView):
+    serializer_class = AdminManageItemSerializer
+
+
+class AdminEditItem(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Item.objects.all()
+    serializer_class = AdminManageItemSerializer
 
 
 # MODERATOR
@@ -12,7 +22,7 @@ class ModeratorShoppingListItem(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ModeratorShoppingListItemSerializer
 
 
-class ModeratorShoppingList(generics.ListAPIView):
+class ModeratorShowShoppingList(generics.ListAPIView):
     serializer_class = ModeratorShoppingListSerializer
 
     def get_queryset(self):
@@ -21,11 +31,23 @@ class ModeratorShoppingList(generics.ListAPIView):
 
 
 # USER
-class UserShoppingList(generics.ListAPIView):
+class UserShowShoppingList(generics.ListAPIView):
     serializer_class = UserShoppingListSerializer
 
     def get_queryset(self):
         return ShoppingList.objects.filter(user=self.request.user)
+
+
+class UserAddShoppingList(generics.CreateAPIView):
+    serializer_class = UserShoppingListSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class UserEditShoppingList(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ShoppingList.objects.all()
+    serializer_class = UserEditShoppingListSerializer
 
 
 class Catalogue(generics.ListAPIView):

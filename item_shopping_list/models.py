@@ -13,10 +13,13 @@ class Item(models.Model):
     description = models.TextField()
 
     def __str__(self) -> str:
-        return self.id + " - " + self.name
+        return str(self.id) + " - " + self.name
 
 
 class ShoppingList(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField()
+
+    def __str__(self) -> str:
+        return str(self.user) + " - " + str(self.item) + " - " + str(self.quantity)
