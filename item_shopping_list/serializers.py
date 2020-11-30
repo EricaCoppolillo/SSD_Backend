@@ -1,43 +1,19 @@
 from rest_framework import serializers
 
-from item_shopping_list.models import ShoppingList, Item
+from item_shopping_list.models import ShoppingListItem
 
 
-# ALL
-class CatalogueSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ('id', 'name', 'category', 'manufacturer', 'price', 'description')
-        model = Item
-
-
-# ADMIN
-class AdminManageItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ('id', 'name', 'category', 'manufacturer', 'price', 'description')
-        model = Item
-
+# TODO: some refactor
 
 # MODERATOR
-class ModeratorShoppingListItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ('id', 'quantity')
-        model = ShoppingList
-
-
 class ModeratorShoppingListSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('id', 'user', 'item', 'quantity')
-        model = ShoppingList
+        fields = ('id', 'name', 'category', 'manufacturer', 'price', 'description', 'quantity')
+        model = ShoppingListItem
 
 
 # USER
 class UserShoppingListSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('item', 'quantity')
-        model = ShoppingList
-
-
-class UserEditShoppingListSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ('id', 'quantity')
-        model = ShoppingList
+        fields = ('id', 'name', 'category', 'manufacturer', 'price', 'description', 'quantity')
+        model = ShoppingListItem

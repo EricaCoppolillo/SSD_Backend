@@ -1,34 +1,16 @@
 # Create your views here.
-from rest_framework import generics, permissions
+from rest_framework import generics
 
-from item_shopping_list.models import ShoppingList, Item
+from item_shopping_list.models import ShoppingListItem
 from item_shopping_list.permissions import IsModerator, IsUser
-from item_shopping_list.serializers import UserShoppingListSerializer, ModeratorShoppingListItemSerializer, \
-    ModeratorShoppingListSerializer, CatalogueSerializer, AdminManageItemSerializer, UserEditShoppingListSerializer
-
-
-# ALL
-class Catalogue(generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
-    queryset = Item.objects.all()
-    serializer_class = CatalogueSerializer
-
-
-# ADMIN
-class AdminAddItem(generics.CreateAPIView):
-    serializer_class = AdminManageItemSerializer
-
-
-class AdminEditItem(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Item.objects.all()
-    serializer_class = AdminManageItemSerializer
+from item_shopping_list.serializers import UserShoppingListSerializer, ModeratorShoppingListSerializer
 
 
 # MODERATOR
 class ModeratorShoppingListItem(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsModerator]
-    queryset = ShoppingList.objects.all()
-    serializer_class = ModeratorShoppingListItemSerializer
+    queryset = ShoppingListItem.objects.all()
+    serializer_class = ModeratorShoppingListSerializer
 
 
 class ModeratorShowShoppingList(generics.ListAPIView):
@@ -37,7 +19,7 @@ class ModeratorShowShoppingList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.kwargs['user']
-        return ShoppingList.objects.filter(user=user)
+        return ShoppingListItem.objects.filter(user=user)
 
 
 # USER
@@ -46,7 +28,7 @@ class UserShowShoppingList(generics.ListAPIView):
     serializer_class = UserShoppingListSerializer
 
     def get_queryset(self):
-        return ShoppingList.objects.filter(user=self.request.user)
+        return ShoppingListItem.objects.filter(user=self.request.user)
 
 
 class UserAddShoppingList(generics.CreateAPIView):
@@ -59,5 +41,5 @@ class UserAddShoppingList(generics.CreateAPIView):
 
 class UserEditShoppingList(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsUser]
-    queryset = ShoppingList.objects.all()
-    serializer_class = UserEditShoppingListSerializer
+    queryset = ShoppingListItem.objects.all()
+    serializer_class = UserShoppingListSerializer

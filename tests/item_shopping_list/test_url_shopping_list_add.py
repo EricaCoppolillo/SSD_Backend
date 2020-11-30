@@ -10,17 +10,18 @@ path = '/api/v1/shopping-list/add/'
 
 
 @pytest.fixture()
-def items(db):
+def shopping_list_items(db):
     return [
-        mixer.blend('item_shopping_list.Item'),
-        mixer.blend('item_shopping_list.Item'),
-        mixer.blend('item_shopping_list.Item'),
+        mixer.blend('item_shopping_list.ShoppingListItem'),
+        mixer.blend('item_shopping_list.ShoppingListItem'),
+        mixer.blend('item_shopping_list.ShoppingListItem'),
     ]
 
 
 @pytest.fixture()
-def item(db):
+def shopping_list_item(db):
     return {
+        'quantity': 1,
         'name': 'name',
         'category': 'category',
         'manufacturer': 'manufacturer',
@@ -38,21 +39,21 @@ def test_moderator_get_forbidden(db):
     assert response.status_code == HTTP_403_FORBIDDEN
 
 
-def test_moderator_post_forbidden(item):
+def test_moderator_post_forbidden(shopping_list_item):
     user = mixer.blend(get_user_model())
     group = mixer.blend(models.Group, name='moderator')
     group.user_set.add(user)
     client = get_client(user)
-    response = client.post(path, data=item)
+    response = client.post(path, data=shopping_list_item)
     assert response.status_code == HTTP_403_FORBIDDEN
 
 
-def test_moderator_put_forbidden(item):
+def test_moderator_put_forbidden(shopping_list_item):
     user = mixer.blend(get_user_model())
     group = mixer.blend(models.Group, name='moderator')
     group.user_set.add(user)
     client = get_client(user)
-    response = client.put(path, data=item)
+    response = client.put(path, data=shopping_list_item)
     assert response.status_code == HTTP_403_FORBIDDEN
 
 
@@ -74,21 +75,21 @@ def test_user_get_method_not_allowed(db):
     assert response.status_code == HTTP_405_METHOD_NOT_ALLOWED
 
 
-def test_user_post_method_not_allowed(item):
+def test_user_post_created(shopping_list_item):
     user = mixer.blend(get_user_model())
     group = mixer.blend(models.Group, name='user')
     group.user_set.add(user)
     client = get_client(user)
-    response = client.post(path, data=item)
+    response = client.post(path, data=shopping_list_item)
     assert response.status_code == HTTP_201_CREATED
 
 
-def test_user_put_method_not_allowed(item):
+def test_user_put_method_not_allowed(shopping_list_item):
     user = mixer.blend(get_user_model())
     group = mixer.blend(models.Group, name='user')
     group.user_set.add(user)
     client = get_client(user)
-    response = client.put(path, data=item)
+    response = client.put(path, data=shopping_list_item)
     assert response.status_code == HTTP_405_METHOD_NOT_ALLOWED
 
 

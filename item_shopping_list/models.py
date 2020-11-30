@@ -6,7 +6,9 @@ from django.db import models
 from item_shopping_list.validators import validate_price, validate_quantity
 
 
-class Item(models.Model):
+class ShoppingListItem(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    quantity = models.IntegerField(validators=[validate_quantity])
     name = models.CharField(max_length=50, validators=[RegexValidator(r'^[\w\s,\'"]+$')])
     category = models.CharField(max_length=20, validators=[RegexValidator(r'^[\w\s]+$')])
     manufacturer = models.CharField(max_length=50, validators=[RegexValidator(r'^[\w\s,\'"]+$')])
@@ -14,14 +16,4 @@ class Item(models.Model):
     description = models.TextField(validators=[RegexValidator(r'^[\w\s,.:;()\'"]{1,500}$')])
 
     def __str__(self) -> str:
-        return str(self.id) + " - " + self.name
-
-
-class ShoppingList(models.Model):
-    # TODO: ask to prof if these fks need to be tested
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.IntegerField(validators=[validate_quantity])
-
-    def __str__(self) -> str:
-        return str(self.user) + " - " + str(self.item.name) + " - " + str(self.quantity)
+        return str(self.user) + " - " + self.name
