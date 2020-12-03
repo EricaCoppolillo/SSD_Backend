@@ -13,7 +13,7 @@ class ShoppingListItem(models.Model):
     category = models.CharField(max_length=20, validators=[RegexValidator(r'^[\w\s]+$')])
     manufacturer = models.CharField(max_length=50, validators=[RegexValidator(r'^[\w\s,\'"]+$')])
     price = models.IntegerField(validators=[validate_price])
-    description = models.TextField(validators=[RegexValidator(r'^[\w\s,.:;()\'"]{1,500}$')])
+    description = models.TextField(null=True, validators=[RegexValidator(r'^[\w\s,.:;()\'"]{1,500}$')])
 
     def __str__(self) -> str:
         return str(self.user) + " - " + self.name
