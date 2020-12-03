@@ -24,20 +24,8 @@ def test_shopping_list_item_name_forbidden_characters_raises_exception(db):
 
 
 # ShoppingListItem category
-def test_shopping_list_item_category_length_less_than_1_raises_exception(db):
-    shopping_list_item = mixer.blend('item_shopping_list.ShoppingListItem', category='')
-    with pytest.raises(ValidationError):
-        shopping_list_item.full_clean()
-
-
-def test_shopping_list_item_category_length_more_than_20_raises_exception(db):
-    shopping_list_item = mixer.blend('item_shopping_list.ShoppingListItem', category='a' * 21)
-    with pytest.raises(ValidationError):
-        shopping_list_item.full_clean()
-
-
-def test_shopping_list_item_category_forbidden_characters_raises_exception(db):
-    shopping_list_item = mixer.blend('item_shopping_list.ShoppingListItem', category='.')
+def test_shopping_list_item_category_not_smartphone_or_computer_raises_exception(db):
+    shopping_list_item = mixer.blend('item_shopping_list.ShoppingListItem', category='pippo')
     with pytest.raises(ValidationError):
         shopping_list_item.full_clean()
 

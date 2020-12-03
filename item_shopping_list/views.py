@@ -3,7 +3,8 @@ from rest_framework import generics
 
 from item_shopping_list.models import ShoppingListItem
 from item_shopping_list.permissions import IsModerator, IsUser
-from item_shopping_list.serializers import UserShoppingListSerializer, ModeratorShoppingListSerializer
+from item_shopping_list.serializers import UserShoppingListSerializer, ModeratorShoppingListSerializer, \
+    UserEditShoppingListSerializer
 
 
 # MODERATOR
@@ -42,4 +43,4 @@ class UserAddShoppingList(generics.CreateAPIView):
 class UserEditShoppingList(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsUser]
     queryset = ShoppingListItem.objects.all()
-    serializer_class = UserShoppingListSerializer
+    serializer_class = UserEditShoppingListSerializer

@@ -68,8 +68,6 @@ def test_moderator_delete_forbidden(db):
 
 def test_user_get_ok_and_correct_number_of_items(shopping_list_items):
     user = mixer.blend(get_user_model())
-    group = mixer.blend(models.Group, name='user')
-    group.user_set.add(user)
     mixer.blend('item_shopping_list.ShoppingListItem', user=user)
     client = get_client(user)
     response = client.get(path)
@@ -80,8 +78,6 @@ def test_user_get_ok_and_correct_number_of_items(shopping_list_items):
 
 def test_user_post_method_not_allowed(shopping_list_item):
     user = mixer.blend(get_user_model())
-    group = mixer.blend(models.Group, name='user')
-    group.user_set.add(user)
     client = get_client(user)
     response = client.post(path, data=shopping_list_item)
     assert response.status_code == HTTP_405_METHOD_NOT_ALLOWED
@@ -89,8 +85,6 @@ def test_user_post_method_not_allowed(shopping_list_item):
 
 def test_user_put_method_not_allowed(shopping_list_item):
     user = mixer.blend(get_user_model())
-    group = mixer.blend(models.Group, name='user')
-    group.user_set.add(user)
     client = get_client(user)
     response = client.put(path, data=shopping_list_item)
     assert response.status_code == HTTP_405_METHOD_NOT_ALLOWED
@@ -98,8 +92,6 @@ def test_user_put_method_not_allowed(shopping_list_item):
 
 def test_user_delete_method_not_allowed(db):
     user = mixer.blend(get_user_model())
-    group = mixer.blend(models.Group, name='user')
-    group.user_set.add(user)
     client = get_client(user)
     response = client.delete(path)
     assert response.status_code == HTTP_405_METHOD_NOT_ALLOWED

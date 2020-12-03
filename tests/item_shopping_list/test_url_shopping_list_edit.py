@@ -24,7 +24,7 @@ def shopping_list_item(db):
     return {
         'quantity': 1,
         'name': 'name',
-        'category': 'category',
+        'category': 'Smartphone',
         'manufacturer': 'manufacturer',
         'price': 1,
         'description': 'description',
@@ -69,8 +69,6 @@ def test_moderator_delete_forbidden(shopping_list_items):
 
 def test_user_get_method_ok(shopping_list_items):
     user = mixer.blend(get_user_model(), id=1)
-    group = mixer.blend(models.Group, name='user')
-    group.user_set.add(user)
     client = get_client(user)
     response = client.get(path)
     assert response.status_code == HTTP_200_OK
@@ -78,8 +76,6 @@ def test_user_get_method_ok(shopping_list_items):
 
 def test_user_post_method_not_allowed(shopping_list_items, shopping_list_item):
     user = mixer.blend(get_user_model(), id=1)
-    group = mixer.blend(models.Group, name='user')
-    group.user_set.add(user)
     client = get_client(user)
     response = client.post(path, data=shopping_list_item)
     assert response.status_code == HTTP_405_METHOD_NOT_ALLOWED
@@ -87,8 +83,6 @@ def test_user_post_method_not_allowed(shopping_list_items, shopping_list_item):
 
 def test_user_put_method_ok(shopping_list_items, shopping_list_item):
     user = mixer.blend(get_user_model(), id=1)
-    group = mixer.blend(models.Group, name='user')
-    group.user_set.add(user)
     client = get_client(user)
     response = client.put(path, data=shopping_list_item)
     assert response.status_code == HTTP_200_OK
@@ -96,8 +90,6 @@ def test_user_put_method_ok(shopping_list_items, shopping_list_item):
 
 def test_user_delete_no_content(shopping_list_items):
     user = mixer.blend(get_user_model(), id=1)
-    group = mixer.blend(models.Group, name='user')
-    group.user_set.add(user)
     client = get_client(user)
     response = client.delete(path)
     assert response.status_code == HTTP_204_NO_CONTENT
