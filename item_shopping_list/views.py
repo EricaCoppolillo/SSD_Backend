@@ -1,13 +1,22 @@
 # Create your views here.
+from django.contrib.auth import get_user_model
 from rest_framework import generics
 
 from item_shopping_list.models import ShoppingListItem
 from item_shopping_list.permissions import IsModerator, IsUser
 from item_shopping_list.serializers import UserShoppingListSerializer, ModeratorShoppingListSerializer, \
-    UserEditShoppingListSerializer
+    UserEditShoppingListSerializer, ModeratorUserListSerializer
 
 
 # MODERATOR
+class ModeratorUserList(generics.ListAPIView):
+    permission_classes = [IsModerator]
+    serializer_class = ModeratorUserListSerializer
+
+    def get_queryset(self):
+        return get_user_model().objects.filter(is_superuser=False).exclude(groups__name='moderator')
+
+
 class ModeratorShoppingListItem(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsModerator]
     queryset = ShoppingListItem.objects.all()
