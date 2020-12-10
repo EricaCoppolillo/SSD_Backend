@@ -2,7 +2,8 @@ import pytest
 from allauth import models
 from django.contrib.auth import get_user_model, models
 from mixer.backend.django import mixer
-from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_405_METHOD_NOT_ALLOWED, HTTP_201_CREATED
+from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_405_METHOD_NOT_ALLOWED, HTTP_201_CREATED, \
+    HTTP_500_INTERNAL_SERVER_ERROR
 
 from tests.item_shopping_list.test_urls_utils import get_client
 
@@ -12,9 +13,12 @@ path = '/api/v1/shopping-list/add/'
 @pytest.fixture()
 def shopping_list_items(db):
     return [
-        mixer.blend('item_shopping_list.ShoppingListItem'),
-        mixer.blend('item_shopping_list.ShoppingListItem'),
-        mixer.blend('item_shopping_list.ShoppingListItem'),
+        mixer.blend('item_shopping_list.ShoppingListItem', category='Smartphone',
+                    description='ciao', quantity=1),
+        mixer.blend('item_shopping_list.ShoppingListItem', category='Smartphone',
+                    description='ciao', quantity=1),
+        mixer.blend('item_shopping_list.ShoppingListItem', category='Smartphone',
+                    description='ciao', quantity=1),
     ]
 
 
@@ -92,3 +96,30 @@ def test_user_delete_method_not_allowed(db):
     client = get_client(user)
     response = client.delete(path)
     assert response.status_code == HTTP_405_METHOD_NOT_ALLOWED
+
+
+def test_user_post_11th_object_error(shopping_list_item):
+    user = mixer.blend(get_user_model())
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                description='ciao', quantity=1)
+    client = get_client(user)
+    response = client.post(path, data=shopping_list_item)
+    assert response.status_code == HTTP_500_INTERNAL_SERVER_ERROR

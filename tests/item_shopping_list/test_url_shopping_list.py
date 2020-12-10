@@ -12,9 +12,12 @@ path = '/api/v1/shopping-list/'
 @pytest.fixture()
 def shopping_list_items(db):
     return [
-        mixer.blend('item_shopping_list.ShoppingListItem'),
-        mixer.blend('item_shopping_list.ShoppingListItem'),
-        mixer.blend('item_shopping_list.ShoppingListItem'),
+        mixer.blend('item_shopping_list.ShoppingListItem', category='Smartphone',
+                    description='ciao', quantity=1),
+        mixer.blend('item_shopping_list.ShoppingListItem', category='Smartphone',
+                    description='ciao', quantity=1),
+        mixer.blend('item_shopping_list.ShoppingListItem', category='Smartphone',
+                    description='ciao', quantity=1),
     ]
 
 

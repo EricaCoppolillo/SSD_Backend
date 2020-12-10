@@ -6,7 +6,7 @@ from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_200_OK, HTTP_405_METH
 
 from tests.item_shopping_list.test_urls_utils import get_client
 
-path = '/api/v1/shopping-list/mod/edit/1'
+path = '/api/v1/shopping-list/mod/edit/1/'
 
 
 @pytest.fixture()
@@ -14,9 +14,12 @@ def shopping_list_items(db):
     user = mixer.blend(get_user_model(), id=1)
     return [
 
-        mixer.blend('item_shopping_list.ShoppingListItem', user=user),
-        mixer.blend('item_shopping_list.ShoppingListItem', user=user),
-        mixer.blend('item_shopping_list.ShoppingListItem', user=user),
+        mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                    description='ciao', quantity=1),
+        mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                    description='ciao', quantity=1),
+        mixer.blend('item_shopping_list.ShoppingListItem', user=user, category='Smartphone',
+                    description='ciao', quantity=1),
     ]
 
 
